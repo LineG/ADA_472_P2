@@ -38,13 +38,13 @@ def n_gram_initial(vocab, smoothing, size):
     return n_gram
 
 def merge_dict(d1, d2):
+    merged = {}
     for k in d2:
         if k in d1:
-            d1[k] = d1[k]+d2[k]
-        #should not happen
+            merged[k] = d1[k]+d2[k]
         else:
-            d1[k] = d2[k]
-    return d1
+            merged[k] = d2[k]
+    return merged
 
 def n_gram(language, vocab, size):
     t = {}
@@ -109,14 +109,21 @@ def input_parser(vocab, smoothing, size):
     return eu, ca, gl, es, pt, en
 
 
-
+vocab = 1
 smoothing = 0.3
+size = 2
 
-[eu, ca, gl, es, pt, en] = input_parser(1, smoothing, 2)
+eu, ca, gl, es, pt, en = input_parser(vocab, smoothing, size)
 
 language_eu = Language('eu',eu, smoothing)
+language_es = Language('es',es, smoothing)
 
-print(language_eu.conditional_probabilities)
+test = "442920689906221056	Malik_Dominguez	es	Llevo preparada desde las ocho de la mañana... ¿Que me ha pasado? Nunca me pasa esto..."
+[tweet_id,user_name ,language, text] = test.split('\t')
+test_tweet = Tweet(tweet_id,user_name ,language, text.strip('\n'))
+test_tweet.case_sensitive()
+test_tweet.counter(size)
 
-
+print(language_eu.score(test_tweet.count))
+print(language_es.score(test_tweet.count))
 

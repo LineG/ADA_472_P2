@@ -1,5 +1,6 @@
 from tweet import Tweet
 import json
+from language_data import Language
 
 def vocabulary_initial(V):
     vocab = []
@@ -37,11 +38,12 @@ def n_gram_initial(vocab, smoothing, size):
     return n_gram
 
 def merge_dict(d1, d2):
-    # d = Counter(d1) + Counter(d2)
-    # return dict(d)
     for k in d2:
         if k in d1:
             d1[k] = d1[k]+d2[k]
+        #should not happen
+        else:
+            d1[k] = d2[k]
     return d1
 
 def n_gram(language, vocab, size):
@@ -104,5 +106,17 @@ def input_parser(vocab, smoothing, size):
     pt = merge_dict(n_gram_init, pt)
     en = merge_dict(n_gram_init, en)
 
+    return eu, ca, gl, es, pt, en
 
-input_parser(2, 0.3, 3)
+
+
+smoothing = 0.3
+
+[eu, ca, gl, es, pt, en] = input_parser(1, smoothing, 2)
+
+language_eu = Language('eu',eu, smoothing)
+
+print(language_eu.conditional_probabilities)
+
+
+

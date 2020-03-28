@@ -108,22 +108,3 @@ def input_parser(vocab, smoothing, size):
 
     return eu, ca, gl, es, pt, en
 
-
-vocab = 1
-smoothing = 0.3
-size = 2
-
-eu, ca, gl, es, pt, en = input_parser(vocab, smoothing, size)
-
-language_eu = Language('eu',eu, smoothing)
-language_es = Language('es',es, smoothing)
-
-test = "442920689906221056	Malik_Dominguez	es	Llevo preparada desde las ocho de la mañana... ¿Que me ha pasado? Nunca me pasa esto..."
-[tweet_id,user_name ,language, text] = test.split('\t')
-test_tweet = Tweet(tweet_id,user_name ,language, text.strip('\n'))
-test_tweet.case_sensitive()
-test_tweet.counter(size)
-
-print(language_eu.score(test_tweet.count))
-print(language_es.score(test_tweet.count))
-

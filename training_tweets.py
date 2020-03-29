@@ -106,7 +106,7 @@ def input_parser(vocab, smoothing, size):
     es_t = merge_dict(n_gram_init, es)
     pt_t = merge_dict(n_gram_init, pt)
     en_t = merge_dict(n_gram_init, en)
-    print(en_t)
+
 
     return eu_t, ca_t, gl_t, es_t, pt_t, en_t
 

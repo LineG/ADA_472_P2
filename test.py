@@ -4,8 +4,8 @@ from tweet import Tweet
 
 
 vocab = 2
-smoothing = 0.3
-size = 2
+smoothing = 0.5
+size = 3
 
 eu, ca, gl, es, pt, en = input_parser(vocab, smoothing, size)
 language_eu = Language('eu',eu,smoothing)

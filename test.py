@@ -3,9 +3,9 @@ from training_tweets import input_parser
 from tweet import Tweet
 
 
-vocab = 2
-smoothing = 0.3
-size = 3
+vocab = 1
+smoothing = 0.6
+size = 2
 
 eu, ca, gl, es, pt, en = input_parser(vocab, smoothing, size)
 language_eu = Language('eu',eu,smoothing)
@@ -25,7 +25,6 @@ for test in input_file:
         test_tweet = Tweet(tweet_id,user_name ,language, text.strip('\n'))
         test_tweet.case_sensitive()
         test_tweet.counter(size)
-
         score = {}
 
         score['eu'] = language_eu.score(test_tweet.count)

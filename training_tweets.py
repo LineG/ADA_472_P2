@@ -1,6 +1,7 @@
 from tweet import Tweet
 import json
 from language_data import Language
+import copy
 
 def vocabulary_initial(V):
     vocab = []
@@ -38,7 +39,7 @@ def n_gram_initial(vocab, smoothing, size):
     return n_gram
 
 def merge_dict(d1, d2):
-    merged = {}
+    merged = copy.copy(d1)
     for k in d2:
         if k in d1:
             merged[k] = d1[k]+d2[k]
@@ -95,16 +96,18 @@ def input_parser(vocab, smoothing, size):
     es = n_gram(es_list, vocab, size)
     pt = n_gram(pt_list, vocab, size)
     en = n_gram(en_list, vocab, size)
+    print(en)
 
     vocabulary = vocabulary_initial(vocab)
     n_gram_init = n_gram_initial(vocabulary, smoothing, size)
 
-    eu = merge_dict(n_gram_init, eu)
-    ca = merge_dict(n_gram_init, ca)
-    gl = merge_dict(n_gram_init, gl)
-    es = merge_dict(n_gram_init, es)
-    pt = merge_dict(n_gram_init, pt)
-    en = merge_dict(n_gram_init, en)
+    eu_t = merge_dict(n_gram_init, eu)
+    ca_t = merge_dict(n_gram_init, ca)
+    gl_t = merge_dict(n_gram_init, gl)
+    es_t = merge_dict(n_gram_init, es)
+    pt_t = merge_dict(n_gram_init, pt)
+    en_t = merge_dict(n_gram_init, en)
 
-    return eu, ca, gl, es, pt, en
+
+    return eu_t, ca_t, gl_t, es_t, pt_t, en_t
 

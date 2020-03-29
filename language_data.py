@@ -24,6 +24,6 @@ class Language:
         score = log(1/6)
         for k in tweet_data:
             if k in self.conditional_probabilities:
-                score += self.conditional_probabilities[k]
+                score += (self.conditional_probabilities[k] ** tweet_data[k])
         return score
 

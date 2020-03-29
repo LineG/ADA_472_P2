@@ -51,11 +51,11 @@ def n_gram(language, vocab, size):
     t = {}
     for i in range(len(language)):
         if vocab == 0:
-            language[i].is_alpha()
+            language[i].lower_case()
         elif vocab == 1:
             language[i].case_sensitive()
         elif vocab == 2:
-            language[i].lower_case()
+            language[i].is_alpha()
         language[i].counter(size)
         t = merge_dict(t, language[i].count)
     return t
@@ -96,7 +96,6 @@ def input_parser(vocab, smoothing, size):
     es = n_gram(es_list, vocab, size)
     pt = n_gram(pt_list, vocab, size)
     en = n_gram(en_list, vocab, size)
-    print(en)
 
     vocabulary = vocabulary_initial(vocab)
     n_gram_init = n_gram_initial(vocabulary, smoothing, size)
@@ -107,7 +106,7 @@ def input_parser(vocab, smoothing, size):
     es_t = merge_dict(n_gram_init, es)
     pt_t = merge_dict(n_gram_init, pt)
     en_t = merge_dict(n_gram_init, en)
-
+    print(en_t)
 
     return eu_t, ca_t, gl_t, es_t, pt_t, en_t
 

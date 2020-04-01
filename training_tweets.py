@@ -3,18 +3,6 @@ import json
 from language_data import Language
 import copy
 
-# def vocabulary_initial(V):
-#     vocab = []
-#     if V == 0:
-#         vocab = [chr(n) for n in range(97,123)]
-
-#     elif V == 1:
-#         vocab = [chr(n) for n in range(65,123) if chr(n).isalpha()]
-
-#     elif V == 2:
-#         vocab = [chr(n) for n in range(65,383) if chr(n).isalpha()]
-
-#     return vocab
 
 def vocabulary_initial(vocab, size, smothing):
     input_file = open("./OriginalDataSet/training-tweets.txt", "r")
@@ -29,27 +17,6 @@ def vocabulary_initial(vocab, size, smothing):
 
     return n_gram_all
 
-def n_gram_initial(vocab, smoothing, size):
-    n_gram = {}
-
-    if size == 1:
-        for n in range(len(vocab)):
-            n_gram[vocab[n]] = smoothing
-
-    elif size == 2:
-        for n1 in range(len(vocab)):
-            for n2 in range(len(vocab)):
-                s = vocab[n1]+vocab[n2]
-                n_gram[s] = smoothing
-
-    elif size == 3:
-        for n1 in range(len(vocab)):
-            for n2 in range(len(vocab)):
-                for n3 in range(len(vocab)):
-                    s = vocab[n1]+vocab[n2]+vocab[n3]
-                    n_gram[s] = smoothing
-
-    return n_gram
 
 def merge_dict(d1, d2):
     merged = copy.copy(d1)

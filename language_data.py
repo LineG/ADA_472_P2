@@ -13,6 +13,7 @@ class Language:
 
     def cal_vocab_len(self):
         l = len(self.data)
+        print(l)
         self.vocab_len = l + (l ** self.smoothing)
 
     def cal_conditional_probabilities(self):
@@ -24,6 +25,7 @@ class Language:
         score = self.language_prob
         for k in tweet_data:
             if k in self.conditional_probabilities:
-                score += self.conditional_probabilities[k] ** tweet_data[k]
+                for i in range(tweet_data[k]):
+                    score += self.conditional_probabilities[k]
         return score
 

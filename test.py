@@ -3,8 +3,8 @@ from training_tweets import input_parser
 from tweet import Tweet
 
 
-vocab = 2
-smoothing = 0.5
+vocab = 0
+smoothing = 0.3
 size = 3
 
 eu, ca, gl, es, pt, en = input_parser(vocab, smoothing, size)

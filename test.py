@@ -4,7 +4,7 @@ from tweet import Tweet
 
 
 vocab = 2
-smoothing = 0.1
+smoothing = 0.01
 size = 3
 
 eu, ca, gl, es, pt, en = input_parser(vocab, smoothing, size)
@@ -47,9 +47,9 @@ for test in input_file:
             right += 1
         else:
             wrong += 1
-    except:
-        print("error reading line")
+    except Exception as error_msg:
+        print(f"Error reading line: {error_msg}")
 
 
-print('right: ',(right/(right+wrong))*100,'%')
-print('wrong: ',(wrong/(right+wrong))*100,'%')
+print(f'Percentage right: {(right/(right+wrong))*100} %')
+print(f'Percentage wrong: {(wrong/(right+wrong))*100} %')

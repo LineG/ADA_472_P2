@@ -1,7 +1,7 @@
 import re
 
 class Tweet:
-    def __init__(self, tweet_id, user_name ,language, text):
+    def __init__(self, tweet_id, user_name, language, text):
         self.tweet_id = tweet_id
         self.user_name = user_name
         self.language = language

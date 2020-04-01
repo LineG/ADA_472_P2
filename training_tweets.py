@@ -3,18 +3,31 @@ import json
 from language_data import Language
 import copy
 
-def vocabulary_initial(V):
-    vocab = []
-    if V == 0:
-        vocab = [chr(n) for n in range(97,123)]
+# def vocabulary_initial(V):
+#     vocab = []
+#     if V == 0:
+#         vocab = [chr(n) for n in range(97,123)]
 
-    elif V == 1:
-        vocab = [chr(n) for n in range(65,123) if chr(n).isalpha()]
+#     elif V == 1:
+#         vocab = [chr(n) for n in range(65,123) if chr(n).isalpha()]
 
-    elif V == 2:
-        vocab = [chr(n) for n in range(65,383) if chr(n).isalpha()]
+#     elif V == 2:
+#         vocab = [chr(n) for n in range(65,383) if chr(n).isalpha()]
 
-    return vocab
+#     return vocab
+
+def vocabulary_initial(vocab, size, smothing):
+    input_file = open("./OriginalDataSet/training-tweets.txt", "r")
+    list_all = []
+    for line in input_file:
+        [tweet_id,user_name ,language, text] = line.split('\t')
+        tweet = Tweet(tweet_id,user_name ,language, text.strip('\n'))
+        list_all.append(tweet)
+    n_gram_all = n_gram(list_all, vocab, size)
+    for k in n_gram_all:
+        n_gram_all[k] = smothing
+
+    return n_gram_all
 
 def n_gram_initial(vocab, smoothing, size):
     n_gram = {}
@@ -70,6 +83,13 @@ def input_parser(vocab, smoothing, size):
     en_list = []
     pt_list = []
 
+    c_eu = 0
+    c_ca = 0
+    c_gl = 0
+    c_es = 0
+    c_pt = 0
+    c_en = 0
+
     input_file = open("./OriginalDataSet/training-tweets.txt", "r")
 
     for line in input_file:
@@ -78,16 +98,22 @@ def input_parser(vocab, smoothing, size):
         [tweet_id,user_name ,language, text] = line.split('\t')
         tweet = Tweet(tweet_id,user_name ,language, text.strip('\n'))
         if language == 'eu':
+            c_eu += 1
             eu_list.append(tweet)
         elif language == 'ca':
+            c_ca += 1
             ca_list.append(tweet)
         elif language == 'gl':
+            c_gl += 1
             gl_list.append(tweet)
         elif language == 'es':
+            c_es += 1
             es_list.append(tweet)
         elif language == 'pt':
+            c_pt += 1
             pt_list.append(tweet)
         elif language == 'en':
+            c_en += 1
             en_list.append(tweet)
 
     eu = n_gram(eu_list, vocab, size)
@@ -97,8 +123,7 @@ def input_parser(vocab, smoothing, size):
     pt = n_gram(pt_list, vocab, size)
     en = n_gram(en_list, vocab, size)
 
-    vocabulary = vocabulary_initial(vocab)
-    n_gram_init = n_gram_initial(vocabulary, smoothing, size)
+    n_gram_init = vocabulary_initial(vocab, size,smoothing)
 
     eu_t = merge_dict(n_gram_init, eu)
     ca_t = merge_dict(n_gram_init, ca)
@@ -107,6 +132,13 @@ def input_parser(vocab, smoothing, size):
     pt_t = merge_dict(n_gram_init, pt)
     en_t = merge_dict(n_gram_init, en)
 
+    print(count, 'eu',c_eu,'ca' ,c_ca, 'gl',c_gl, 'pt',c_pt,'es', c_es,'en', c_en)
+    eu_p  = c_eu/count
+    ca_p  = c_ca/count
+    gl_p  = c_gl/count
+    pt_p  = c_pt/count
+    es_p  = c_es/count
+    en_p  = c_en/count
 
-    return eu_t, ca_t, gl_t, es_t, pt_t, en_t
-
+    input_file.close()
+    return [eu_t, eu_p], [ca_t, ca_p], [gl_t,gl_p], [es_t,es_p], [pt_t,pt_p], [en_t,en_p]

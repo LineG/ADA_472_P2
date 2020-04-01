@@ -4,10 +4,10 @@ class Language:
     def __init__(self, iso, data, smoothing):
         self.smoothing = smoothing
         self.iso = iso
-        self.data = data
+        self.data = data[0]
         self.vocab_len = 0
         self.conditional_probabilities = {}
-        self.language_prob = log(1/6)
+        self.language_prob = log(data[1])
         self.cal_vocab_len()
         self.cal_conditional_probabilities()
 
@@ -21,9 +21,9 @@ class Language:
             self.conditional_probabilities[k] = log(f)
 
     def score(self, tweet_data):
-        score = log(1/6)
+        score = self.language_prob
         for k in tweet_data:
             if k in self.conditional_probabilities:
-                score += (self.conditional_probabilities[k] + log(tweet_data[k]))
+                score += self.conditional_probabilities[k] ** tweet_data[k]
         return score
 

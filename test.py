@@ -50,5 +50,5 @@ for test in input_file:
     except:
         print("error reading line")
 
-print(wrong)
 print(right)
+print(wrong)

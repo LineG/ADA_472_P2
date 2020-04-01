@@ -3,8 +3,8 @@ from training_tweets import input_parser
 from tweet import Tweet
 
 
-vocab = 0
-smoothing = 0.3
+vocab = 2
+smoothing = 0.1
 size = 3
 
 eu, ca, gl, es, pt, en = input_parser(vocab, smoothing, size)
@@ -50,5 +50,6 @@ for test in input_file:
     except:
         print("error reading line")
 
-print(right)
-print(wrong)
+
+print('right: ',(right/(right+wrong))*100,'%')
+print('wrong: ',(wrong/(right+wrong))*100,'%')

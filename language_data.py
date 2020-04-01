@@ -13,7 +13,6 @@ class Language:
 
     def cal_vocab_len(self):
         l = len(self.data)
-        print(l)
         self.vocab_len = l + (l ** self.smoothing)
 
     def cal_conditional_probabilities(self):

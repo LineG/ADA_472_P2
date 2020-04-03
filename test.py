@@ -71,7 +71,7 @@ for tweet in tweets:
 
         estimate_l = max(score, key=score.get)
 
-        if debug < 3:
+        if debug < 0:
             print(tweet.tweet_id)
             print(score)
             print(estimate_l, tweet.language)

@@ -1,5 +1,6 @@
 from math import log10
 
+
 class Language:
     def __init__(self, iso, uni, bi, tri):
         self.iso = iso
@@ -7,7 +8,6 @@ class Language:
         self.bi = bi
         self.tri = tri
         self.conditional_probabilities = {}
-
 
     def cal_conditional_probabilities(self, size, smoothing):
         if size == 1:
@@ -40,12 +40,11 @@ class Language:
                 f = (self.tri[k]+smoothing)/den
                 self.conditional_probabilities[k] = log10(f)
 
-    def score(self, tweet_data):
-        score = 0
+    def score(self, tweet_data, language_count):
+        score = log10(language_count[self.iso]/sum(language_count.values()))
         for k in tweet_data:
             if k in self.conditional_probabilities:
                 for i in range(tweet_data[k]):
                     score += self.conditional_probabilities[k]
 
         return score
-

@@ -1,13 +1,14 @@
 import re
 
+
 class Tweet:
-    def __init__(self, tweet_id, user_name ,language, text):
+    def __init__(self, tweet_id, user_name, language, text):
         self.tweet_id = tweet_id
         self.user_name = user_name
         self.language = language
         self.strip_text = ''
         self.text = text
-        #dividing the sentence into  1, 2 or 3 character string
+        # dividing the sentence into  1, 2 or 3 character string
         self.uni = {}
         self.bi = {}
         self.tri = {}
@@ -30,7 +31,7 @@ class Tweet:
             else:
                 self.strip_text += '*'
 
-    #helper function
+    # helper function
     def add_key(self, k, count):
         if k in count:
             count[k] += 1
@@ -38,10 +39,10 @@ class Tweet:
             count[k] = 1
 
     def counter(self):
-        l  = len(self.strip_text)
+        l = len(self.strip_text)
         s = self.strip_text
 
-        a = self.strip_text.replace('*','')
+        a = self.strip_text.replace('*', '')
         for k in a:
             self.add_key(k, self.uni)
 

@@ -2,25 +2,26 @@ from tweet import Tweet
 from n_gram import N_Gram
 from language import Language
 
-size = 2
-vocab = 2
-smoothing = 0.3
+size = 3
+vocab = 1
+smoothing = 0.1
 
 in_file1 = "./OriginalDataSet/training-tweets.txt"
 n_gram = N_Gram(in_file1, size, vocab, smoothing)
 [uni, bi, tri] = n_gram.count()
+language_count = n_gram.language_count
 
 tweets = []
 
 right = 0
 wrong = 0
 
-eu = Language('eu',uni['eu'],bi['eu'],tri['eu'])
-es = Language('es',uni['es'],bi['es'],tri['es'])
-pt = Language('pt',uni['pt'],bi['pt'],tri['pt'])
-en = Language('en',uni['en'],bi['en'],tri['en'])
-ca = Language('ca',uni['ca'],bi['ca'],tri['ca'])
-gl = Language('gl',uni['gl'],bi['gl'],tri['gl'])
+eu = Language('eu', uni['eu'], bi['eu'], tri['eu'])
+es = Language('es', uni['es'], bi['es'], tri['es'])
+pt = Language('pt', uni['pt'], bi['pt'], tri['pt'])
+en = Language('en', uni['en'], bi['en'], tri['en'])
+ca = Language('ca', uni['ca'], bi['ca'], tri['ca'])
+gl = Language('gl', uni['gl'], bi['gl'], tri['gl'])
 
 
 eu.cal_conditional_probabilities(size, smoothing)
@@ -35,8 +36,8 @@ input_file = open(in_file2, "r")
 
 for line in input_file:
     try:
-        [tweet_id,user_name ,language, text] = line.split('\t')
-        tweets.append(Tweet(tweet_id,user_name ,language, text.strip('\n')))
+        [tweet_id, user_name, language, text] = line.split('\t')
+        tweets.append(Tweet(tweet_id, user_name, language, text.strip('\n')))
     except:
         print('ERROR reading file')
 input_file.close()
@@ -62,12 +63,12 @@ for tweet in tweets:
 
         score = {}
 
-        score['eu'] = eu.score(count)
-        score['es'] = es.score(count)
-        score['ca'] = ca.score(count)
-        score['gl'] = gl.score(count)
-        score['pt'] = pt.score(count)
-        score['en'] = en.score(count)
+        score['eu'] = eu.score(count, language_count)
+        score['es'] = es.score(count, language_count)
+        score['ca'] = ca.score(count, language_count)
+        score['gl'] = gl.score(count, language_count)
+        score['pt'] = pt.score(count, language_count)
+        score['en'] = en.score(count, language_count)
 
         estimate_l = max(score, key=score.get)
 
@@ -81,10 +82,10 @@ for tweet in tweets:
         else:
             wrong += 1
 
-        debug+=1
+        debug += 1
     except:
         print('ERROR calculating score')
 
 
-print('right: ',(right/(right+wrong))*100,'%')
-print('wrong: ',(wrong/(right+wrong))*100,'%')
+print('right: ', (right/(right+wrong))*100, '%')
+print('wrong: ', (wrong/(right+wrong))*100, '%')

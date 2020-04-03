@@ -2,9 +2,11 @@ from tweet import Tweet
 from language import Language
 from copy import copy
 import json
+from collections import Counter
+
 
 class N_Gram:
-    def __init__(self,in_file, size, vocab, smoothing):
+    def __init__(self, in_file, size, vocab, smoothing):
         self.in_file = in_file
         self.size = size
         self.vocab = vocab
@@ -14,22 +16,24 @@ class N_Gram:
         self.uni_gram = {}
         self.bi_gram = {}
         self.tri_gram = {}
+        self.language_count = Counter()
 
     def parse_input(self):
         input_file = open(self.in_file, "r")
 
-        for i in range(97,123):
+        for i in range(97, 123):
             if chr(i) not in self.char_set:
                 self.char_set.append(chr(i))
 
         if self.vocab > 0:
-            for i in range(65,91):
+            for i in range(65, 91):
                 if chr(i) not in self.char_set:
                     self.char_set.append(chr(i))
 
         for line in input_file:
-            [tweet_id,user_name ,language, text] = line.split('\t')
-            self.tweets.append(Tweet(tweet_id,user_name ,language, text.strip('\n')))
+            [tweet_id, user_name, language, text] = line.split('\t')
+            self.language_count[language] += 1
+            self.tweets.append(Tweet(tweet_id, user_name, language, text.strip('\n')))
             if self.vocab > 1:
                 for char in text:
                     if char not in self.char_set:
@@ -65,10 +69,12 @@ class N_Gram:
         self.parse_input()
         self.build_n_gram()
 
-        language_uni_gram = {'eu':copy(self.uni_gram), 'pt':copy(self.uni_gram), 'gl':copy(self.uni_gram), 'en':copy(self.uni_gram), 'es':copy(self.uni_gram), 'ca':copy(self.uni_gram)}
-        language_bi_gram = {'eu':copy(self.bi_gram), 'pt':copy(self.bi_gram), 'gl':copy(self.bi_gram), 'en':copy(self.bi_gram), 'es':copy(self.bi_gram), 'ca':copy(self.bi_gram)}
-        language_tri_gram = {'eu':copy(self.tri_gram), 'pt':copy(self.tri_gram), 'gl':copy(self.tri_gram), 'en':copy(self.tri_gram), 'es':copy(self.tri_gram), 'ca':copy(self.tri_gram)}
-
+        language_uni_gram = {'eu': copy(self.uni_gram), 'pt': copy(self.uni_gram), 'gl': copy(
+            self.uni_gram), 'en': copy(self.uni_gram), 'es': copy(self.uni_gram), 'ca': copy(self.uni_gram)}
+        language_bi_gram = {'eu': copy(self.bi_gram), 'pt': copy(self.bi_gram), 'gl': copy(
+            self.bi_gram), 'en': copy(self.bi_gram), 'es': copy(self.bi_gram), 'ca': copy(self.bi_gram)}
+        language_tri_gram = {'eu': copy(self.tri_gram), 'pt': copy(self.tri_gram), 'gl': copy(
+            self.tri_gram), 'en': copy(self.tri_gram), 'es': copy(self.tri_gram), 'ca': copy(self.tri_gram)}
 
         for tweet in self.tweets:
             if self.vocab == 0:
@@ -92,7 +98,6 @@ class N_Gram:
                 l[k] += tweet.tri[k]
 
         return language_uni_gram, language_bi_gram, language_tri_gram
-
 
 
 # in_file = "./OriginalDataSet/training-tweets.txt"

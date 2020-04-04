@@ -30,7 +30,7 @@ ca.cal_conditional_probabilities(size, smoothing)
 gl.cal_conditional_probabilities(size, smoothing)
 
 in_file2 = "./OriginalDataSet/test-tweets-given.txt"
-input_file = open(in_file2, "r")
+input_file = open(in_file2, "r", encoding="utf8")
 
 for line in input_file:
     try:

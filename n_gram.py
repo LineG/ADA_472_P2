@@ -19,7 +19,7 @@ class N_Gram:
         self.language_count = Counter()
 
     def parse_input(self):
-        input_file = open(self.in_file, "r")
+        input_file = open(self.in_file, "r", encoding="utf8")
 
         for i in range(97, 123):
             if chr(i) not in self.char_set:

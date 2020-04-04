@@ -94,7 +94,7 @@ for tweet in tweets:
         # Trace Output File
         with open(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt', 'a') as trace_file:
             correct_wrong = 'correct' if estimate_l == tweet.language else 'wrong'
-            trace_file.write(f'{tweet.tweet_id}  {estimate_l}  {score[estimate_s]}  {tweet.language}  {correct_wrong}\n')
+            trace_file.write(f'{tweet.tweet_id}  {estimate_l}  {score[estimate_s]:.2E}  {tweet.language}  {correct_wrong}\n')
 
         debug += 1
     except:

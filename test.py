@@ -2,6 +2,7 @@ from tweet import Tweet
 from n_gram import N_Gram
 from language import Language
 from collections import Counter
+import os
 
 size = 3
 vocab = 1
@@ -45,6 +46,8 @@ overall_result = Counter()
 language_result = {'eu': Counter(), 'ca': Counter(), 'gl': Counter(), 'es': Counter(), 'en': Counter(), 'pt': Counter()}
 debug = 0
 
+if os.path.exists(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt'):
+  os.remove(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt')
 for tweet in tweets:
     try:
         if vocab == 0:

@@ -8,6 +8,9 @@ size = 3
 vocab = 1
 smoothing = 0.1
 
+# BYOM
+es_exclusive = ['es', set(['¿','¡'])]
+
 in_file1 = "./OriginalDataSet/training-tweets.txt"
 n_gram = N_Gram(in_file1, size, vocab, smoothing)
 [uni, bi, tri] = n_gram.count()
@@ -77,7 +80,13 @@ for tweet in tweets:
         score['en'] = en.score(count, language_count)
 
         estimate_l = max(score, key=score.get)
-        estimate_s = max(score, key = lambda s: score[s])
+        estimate_s = score[estimate_l]
+
+        #BYOM
+        if any(x in tweet.text for x in es_exclusive[1]):
+            estimate_l = es_exclusive[0]
+            estimate_s = 0
+
         if debug < 0:
             print(tweet.tweet_id)
             print(score)
@@ -94,11 +103,11 @@ for tweet in tweets:
         # Trace Output File
         with open(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt', 'a') as trace_file:
             correct_wrong = 'correct' if estimate_l == tweet.language else 'wrong'
-            trace_file.write(f'{tweet.tweet_id}  {estimate_l}  {score[estimate_s]:.2E}  {tweet.language}  {correct_wrong}\n')
+            trace_file.write(f'{tweet.tweet_id}  {estimate_l}  {estimate_s:.2E}  {tweet.language}  {correct_wrong}\n')
 
         debug += 1
-    except:
-        print('ERROR calculating score')
+    except Exception as error_msg:
+        print(f'ERROR calculating score: {error_msg}')
 
 # Eval Output File
 with open(f'ModifiedDataSet/eval_{vocab}_{size}_{smoothing}.txt', 'w') as eval_file:

@@ -44,6 +44,7 @@ input_file.close()
 
 overall_result = Counter()
 language_result = {'eu': Counter(), 'ca': Counter(), 'gl': Counter(), 'es': Counter(), 'en': Counter(), 'pt': Counter()}
+language_predictions = Counter()
 debug = 0
 
 if os.path.exists(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt'):
@@ -82,6 +83,7 @@ for tweet in tweets:
             print(score)
             print(estimate_l, tweet.language)
 
+        language_predictions[estimate_l] += 1
         if estimate_l == tweet.language:
             overall_result['right'] += 1
             language_result[tweet.language]['right'] += 1
@@ -89,14 +91,40 @@ for tweet in tweets:
             overall_result['wrong'] += 1
             language_result[tweet.language]['wrong'] += 1
 
-        with open(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt', 'a') as csvfile:
+        # Trace Output File
+        with open(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt', 'a') as trace_file:
             correct_wrong = 'correct' if estimate_l == tweet.language else 'wrong'
-            csvfile.write(f'{tweet.tweet_id}  {estimate_l}  {score[estimate_s]}  {tweet.language}  {correct_wrong}\n')
+            trace_file.write(f'{tweet.tweet_id}  {estimate_l}  {score[estimate_s]}  {tweet.language}  {correct_wrong}\n')
 
         debug += 1
     except:
         print('ERROR calculating score')
 
-# print(language_result)
-print('right: ', (overall_result['right']/sum(overall_result.values()))*100, '%')
-print('wrong: ', (overall_result['wrong']/sum(overall_result.values()))*100, '%')
+# Eval Output File
+with open(f'ModifiedDataSet/eval_{vocab}_{size}_{smoothing}.txt', 'w') as eval_file:
+    accuracy = round(overall_result['right'] / sum(overall_result.values()), 4)
+    per_class_precision = []
+    per_class_recall = []
+    for language in language_result:
+        per_class_precision.append(round(language_result[language]['right'] / language_predictions[language], 4))
+        per_class_recall.append(round(language_result[language]['right'] / sum(language_result[language].values()), 4))
+    per_class_f1 = [round((x*y)/(x+y), 2) if x > 0 or y > 0 else 0.0 for x, y in zip(per_class_precision, per_class_recall)]
+    macro_f1 = round(sum(per_class_f1) / len(per_class_f1), 4)
+
+    weighted_f1 = 0
+    for index, language in enumerate(language_result):
+        weighted_f1 += sum(language_result[language].values()) * per_class_f1[index]
+    weighted_f1 = round(weighted_f1 / sum(overall_result.values()), 4)
+
+
+    eval_file.write(f'{accuracy}\n')
+    eval_file.writelines(f'{c}  ' for c in per_class_precision)
+    eval_file.write('\n')
+    eval_file.writelines(f'{c}  ' for c in per_class_recall)
+    eval_file.write('\n')
+    eval_file.writelines(f'{c}  ' for c in per_class_f1)
+    eval_file.write('\n')
+    eval_file.write(f'{macro_f1}  {weighted_f1}')
+
+print('right: ', (overall_result['right'] / sum(overall_result.values())) * 100, '%')
+print('wrong: ', (overall_result['wrong'] / sum(overall_result.values())) * 100, '%')

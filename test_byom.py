@@ -5,7 +5,7 @@ from collections import Counter
 import os
 
 size = 3
-vocab = 1
+vocab = 2
 smoothing = 0.1
 adjustment = 0.1
 

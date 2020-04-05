@@ -5,7 +5,7 @@ from collections import Counter
 import os
 
 size = 3
-vocab = 1
+vocab = 2
 smoothing = 0.1
 
 
@@ -113,7 +113,7 @@ with open(f'ModifiedDataSet/eval_{vocab}_{size}_{smoothing}.txt', 'w') as eval_f
     per_class_precision = []
     per_class_recall = []
     for language in language_result:
-        per_class_precision.append(round(language_result[language]['right'] / language_predictions[language], 4))
+        per_class_precision.append(round(language_result[language]['right'] / language_predictions[language], 4)) if language_predictions[language] > 0 else per_class_precision.append(0)
         per_class_recall.append(round(language_result[language]['right'] / sum(language_result[language].values()), 4))
     per_class_f1 = [round((x * y) / (x + y), 2) if x > 0 or y > 0 else 0.0 for x, y in
                     zip(per_class_precision, per_class_recall)]

@@ -115,7 +115,7 @@ with open(f'ModifiedDataSet/eval_myModel.txt', 'w') as eval_file:
     per_class_precision = []
     per_class_recall = []
     for language in language_result:
-        per_class_precision.append(round(language_result[language]['right'] / language_predictions[language], 4))
+        per_class_precision.append(round(language_result[language]['right'] / language_predictions[language], 4)) if language_predictions[language] > 0 else per_class_precision.append(0)
         per_class_recall.append(round(language_result[language]['right'] / sum(language_result[language].values()), 4))
     per_class_f1 = [round((x * y) / (x + y), 2) if x > 0 or y > 0 else 0.0 for x, y in
                     zip(per_class_precision, per_class_recall)]

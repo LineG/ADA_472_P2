@@ -6,6 +6,7 @@ AI _ WINTER 2020 Concordia University
 ### Project 2
 The current version is only for delivrable 1:
 > N-Gram models with 3 variables as input: size, vocabulary, smoothing
+
 > BYOM fixed input that are optimized
 
 ### Team Members

@@ -1,12 +1,13 @@
 from tweet import Tweet
 from n_gram import N_Gram
-from language import Language
+from language import ByomLanguage
 from collections import Counter
 import os
 
 size = 3
 vocab = 1
 smoothing = 0.1
+adjustment = 0.1
 
 
 in_file1 = "./OriginalDataSet/training-tweets.txt"
@@ -16,12 +17,12 @@ language_count = n_gram.language_count
 
 tweets = []
 
-eu = Language('eu', uni['eu'], bi['eu'], tri['eu'])
-es = Language('es', uni['es'], bi['es'], tri['es'])
-pt = Language('pt', uni['pt'], bi['pt'], tri['pt'])
-en = Language('en', uni['en'], bi['en'], tri['en'])
-ca = Language('ca', uni['ca'], bi['ca'], tri['ca'])
-gl = Language('gl', uni['gl'], bi['gl'], tri['gl'])
+eu = ByomLanguage('eu', uni['eu'], bi['eu'], tri['eu'], adjustment)
+es = ByomLanguage('es', uni['es'], bi['es'], tri['es'], adjustment)
+pt = ByomLanguage('pt', uni['pt'], bi['pt'], tri['pt'], adjustment)
+en = ByomLanguage('en', uni['en'], bi['en'], tri['en'], adjustment)
+ca = ByomLanguage('ca', uni['ca'], bi['ca'], tri['ca'], adjustment)
+gl = ByomLanguage('gl', uni['gl'], bi['gl'], tri['gl'], adjustment)
 
 eu.cal_conditional_probabilities(size, smoothing)
 es.cal_conditional_probabilities(size, smoothing)
@@ -53,8 +54,8 @@ language_result = {'eu': Counter(), 'ca': Counter(), 'gl': Counter(), 'es': Coun
 language_predictions = Counter()
 debug = 0
 
-if os.path.exists(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt'):
-    os.remove(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt')
+if os.path.exists(f'ModifiedDataSet/trace_myModel.txt'):
+    os.remove(f'ModifiedDataSet/trace_myModel.txt')
 for tweet in tweets:
     try:
         if vocab == 0:
@@ -75,15 +76,16 @@ for tweet in tweets:
 
         score = {}
 
-        score['eu'] = eu.score(count, language_count)
-        score['es'] = es.score(count, language_count)
-        score['ca'] = ca.score(count, language_count)
-        score['gl'] = gl.score(count, language_count)
-        score['pt'] = pt.score(count, language_count)
-        score['en'] = en.score(count, language_count)
+        score['eu'] = eu.score(count, language_count, tweet)
+        score['es'] = es.score(count, language_count, tweet)
+        score['ca'] = ca.score(count, language_count, tweet)
+        score['gl'] = gl.score(count, language_count, tweet)
+        score['pt'] = pt.score(count, language_count, tweet)
+        score['en'] = en.score(count, language_count, tweet)
 
         estimate_l = max(score, key=score.get)
         estimate_s = score[estimate_l]
+
 
         if debug < 0:
             print(tweet.tweet_id)
@@ -99,7 +101,7 @@ for tweet in tweets:
             language_result[tweet.language]['wrong'] += 1
 
         # Trace Output File
-        with open(f'ModifiedDataSet/trace_{vocab}_{size}_{smoothing}.txt', 'a') as trace_file:
+        with open(f'ModifiedDataSet/trace_myModel.txt', 'a') as trace_file:
             correct_wrong = 'correct' if estimate_l == tweet.language else 'wrong'
             trace_file.write(f'{tweet.tweet_id}  {estimate_l}  {estimate_s:.2E}  {tweet.language}  {correct_wrong}\n')
 
@@ -108,7 +110,7 @@ for tweet in tweets:
         print(f'ERROR calculating score: {error_msg}')
 
 # Eval Output File
-with open(f'ModifiedDataSet/eval_{vocab}_{size}_{smoothing}.txt', 'w') as eval_file:
+with open(f'ModifiedDataSet/eval_myModel.txt', 'w') as eval_file:
     accuracy = round(overall_result['right'] / sum(overall_result.values()), 4)
     per_class_precision = []
     per_class_recall = []

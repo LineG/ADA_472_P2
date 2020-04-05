@@ -101,7 +101,7 @@ for tweet in tweets:
             language_result[tweet.language]['wrong'] += 1
 
         # Trace Output File
-        with open(f'ModifiedDataSet/trace_myModel.txt', 'a') as trace_file:
+        with open(f'ModifiedDataSet/trace_myModel.txt', 'a', encoding='utf8') as trace_file:
             correct_wrong = 'correct' if estimate_l == tweet.language else 'wrong'
             trace_file.write(f'{tweet.tweet_id}  {estimate_l}  {estimate_s:.2E}  {tweet.language}  {correct_wrong}\n')
 
@@ -110,7 +110,7 @@ for tweet in tweets:
         print(f'ERROR calculating score: {error_msg}')
 
 # Eval Output File
-with open(f'ModifiedDataSet/eval_myModel.txt', 'w') as eval_file:
+with open(f'ModifiedDataSet/eval_myModel.txt', 'w', encoding='utf8') as eval_file:
     accuracy = round(overall_result['right'] / sum(overall_result.values()), 4)
     per_class_precision = []
     per_class_recall = []

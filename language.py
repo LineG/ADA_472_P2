@@ -110,19 +110,49 @@ class ByomLanguage(Language):
 
         if self.iso == 'es':
             for letter in word:
-                if letter in {'á', 'é', 'í', 'ó', 'ú'}:
+                if letter in {'á', 'é', 'í', 'ó', 'ú', 'ñ'}:
                     bonus += 1
                 if letter in {'ã', 'õ', 'â', 'ê', 'ô', 'à', 'ç'}:
                     bonus -= 1
             if "'" in word or "üg" in word:
                 bonus -= 1
-            if "gü" in word:
+            if "gü" in word or\
+                    word in {'de', 'el', 'del', 'los', 'la', 'las', 'uno', 'unos', 'una', 'unas', 'y'} or\
+                        word[0:2] == 'll':
                 bonus += 1
-
+            for ending in [ 'o', 'a', 'ción', 'miento', 'dad']:
+                if word[-len(ending):] == ending:
+                    bonus += 1
             pass
         if self.iso == 'en':
+            if word in {'a', 'an', 'and', 'in', 'of', 'on', 'the', 'that', 'to', 'is', 'I'}:
+                bonus += 1
+            for syllable in ['th', 'ch', 'sh', 'ough', 'augh']:
+                if syllable in word:
+                    bonus += 1
+            for ending in ['ing', 'tion', 'ed', 'age', 's', '\'s', '\'ve', 'n\'t', '\'d']:
+                if word[-len(ending):] == ending:
+                    bonus += 1
+            for letter in word:
+                if letter in {'á', 'é', 'í', 'ó', 'ú', 'ñ', 'ã', 'õ', 'â', 'ê', 'ô', 'à', 'ç'}:
+                    bonus -= 1
             pass
         if self.iso == 'pt':
+            for letter in word:
+                if letter in {'ã', 'õ', 'â', 'ê', 'ô', 'á', 'é', 'í', 'ó', 'ú', 'à', 'ç'}:
+                    bonus += 1
+                if letter in {'k', 'w', 'y'}:
+                    bonus -= 1
+            if word in {'a', 'à', 'e', 'é', 'o',
+                        'ao', 'as', 'às', 'da', 'de', 'do', 'em', 'os', 'ou', 'um',
+                        'aos', 'com', 'das', 'dos', 'ele', 'ela', 'mas', 'não', 'por', 'que', 'são', 'uma'}:
+                bonus += 1
+            for ending in ['ção', 'dade', 'ismo', 'mente']:
+                if word[-len(ending):] == ending:
+                    bonus += 1
+            for syllable in ['ch', 'nh', 'lh']:
+                if syllable in word:
+                    bonus += 1
             pass
         return bonus
         pass

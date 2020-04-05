@@ -1,14 +1,20 @@
+# Line Ghanem 27280076
+# Anthony Iatropoulos 40028246
+# Mikael Samvelian 40003178
+
 import re
 
 class Tweet:
-    def __init__(self, tweet_id, user_name ,language, text):
+    def __init__(self, tweet_id, user_name, language, text):
         self.tweet_id = tweet_id
         self.user_name = user_name
         self.language = language
         self.strip_text = ''
         self.text = text
-        #dividing the sentence into  1, 2 or 3 character string
-        self.count = {}
+        # dividing the sentence into  1, 2 or 3 character string
+        self.uni = {}
+        self.bi = {}
+        self.tri = {}
 
     # V = 0
     def lower_case(self):
@@ -28,28 +34,27 @@ class Tweet:
             else:
                 self.strip_text += '*'
 
-
-    #helper function
-    def add_key(self, k):
-        if k in self.count:
-            self.count[k] += 1
+    # helper function
+    def add_key(self, k, count):
+        if k in count:
+            count[k] += 1
         else:
-            self.count[k] = 1
+            count[k] = 1
 
-    def counter(self, n):
-        l  = len(self.strip_text)
+    def counter(self):
+        l = len(self.strip_text)
         s = self.strip_text
-        if n == 1:
-            a = self.strip_text.replace('*','')
-            for k in a:
-                self.add_key(k)
-        elif n == 2:
-            for n in range(l-1):
-                k = s[n]+s[n+1]
-                if not '*' in k:
-                    self.add_key(k)
-        elif n == 3:
-            for n in range(l-2):
-                k = s[n]+s[n+1]+s[n+2]
-                if not '*' in k:
-                    self.add_key(k)
+
+        a = self.strip_text.replace('*', '')
+        for k in a:
+            self.add_key(k, self.uni)
+
+        for n in range(l-1):
+            k = s[n]+s[n+1]
+            if not '*' in k:
+                self.add_key(k, self.bi)
+
+        for n in range(l-2):
+            k = s[n]+s[n+1]+s[n+2]
+            if not '*' in k:
+                self.add_key(k, self.tri)

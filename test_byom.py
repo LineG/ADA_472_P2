@@ -1,3 +1,7 @@
+# Line Ghanem 27280076
+# Anthony Iatropoulos 40028246
+# Mikael Samvelian 40003178
+
 from tweet import Tweet
 from n_gram import N_Gram
 from language import ByomLanguage

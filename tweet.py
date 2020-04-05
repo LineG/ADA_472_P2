@@ -1,5 +1,8 @@
-import re
+# Line Ghanem 27280076
+# Anthony Iatropoulos 40028246
+# Mikael Samvelian 40003178
 
+import re
 
 class Tweet:
     def __init__(self, tweet_id, user_name, language, text):

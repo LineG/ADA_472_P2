@@ -109,12 +109,12 @@ for tweet in tweets:
 
 # Eval Output File
 with open(f'ModifiedDataSet/eval_{vocab}_{size}_{smoothing}.txt', 'w') as eval_file:
-    accuracy = round(overall_result['right'] / sum(overall_result.values()), 4)
+    accuracy = round(overall_result['right'] / sum(overall_result.values()), 4) if sum(overall_result.values()) > 0 else 0
     per_class_precision = []
     per_class_recall = []
     for language in language_result:
         per_class_precision.append(round(language_result[language]['right'] / language_predictions[language], 4)) if language_predictions[language] > 0 else per_class_precision.append(0)
-        per_class_recall.append(round(language_result[language]['right'] / sum(language_result[language].values()), 4))
+        per_class_recall.append(round(language_result[language]['right'] / sum(language_result[language].values()), 4)) if sum(language_result[language].values()) > 0 else per_class_recall.append(0)
     per_class_f1 = [round((x * y) / (x + y), 2) if x > 0 or y > 0 else 0.0 for x, y in
                     zip(per_class_precision, per_class_recall)]
     macro_f1 = round(sum(per_class_f1) / len(per_class_f1), 4)

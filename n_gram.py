@@ -1,3 +1,8 @@
+# Line Ghanem 27280076
+# Anthony Iatropoulos 40028246
+# Mikael Samvelian 40003178
+
+
 from tweet import Tweet
 from language import Language
 from copy import copy
